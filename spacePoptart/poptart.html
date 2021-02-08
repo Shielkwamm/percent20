@@ -27,7 +27,7 @@ const height = 768;
 const color = white; // ZIM colors like green, blue, pink, faint, clear, etc.
 const outerColor = white; // any HTML colors like "violet", "#333", etc. are fine to use
 
-const frame = new Frame(scaling, width, height, color, outerColor, ["crust.jpg", "frosting.jpg", "crustLeft.png", "crustRight.png", "sweetFrostingLeft.png", "sweetFrostingRight.png"], "images/");
+const frame = new Frame(scaling, width, height, color, outerColor, ["crust1.jpg", "crust2.jpg", "frosting1.jpg", "frosting.jpg", "crustLeft.png", "crustRight.png", "sweetFrostingLeft.png", "sweetFrostingRight.png"], "images/");
 frame.on("ready", () => { // ES6 Arrow Function - like function(){}
     zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
 
@@ -35,13 +35,12 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
     let stageW = frame.width;
     let stageH = frame.height;
 
-    //const mask = frame.asset("alpha.png").cache()
-    //var mask = frame.asset("pragma_l.png").cache();
-    var frosting1 = frame.asset("frosting.jpg").center().cache();
-    var crust1 = frame.asset("crust.jpg").center().cache();
-    var frosting2 = frame.asset("frosting.jpg").center().cache();
-    var crust2 = frame.asset("crust.jpg").center().cache();
-
+    var crust1 = frame.asset("crust1.jpg").center().drag().transform({
+      showStretch: true
+    });
+    var crust2 = frame.asset("crust2.jpg").center().drag().transform({
+      showStretch: true
+    });
 
     var crustLeft = frame.asset("crustLeft.png").center().mov(-300).drag().transform({
       showStretch: true
@@ -51,36 +50,38 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
       showStretch: true
     })
 
+
+    /*var frosting1 = frame.asset("frosting.jpg").center().drag().transform({
+      showStretch: true
+    });;
+
+    var frosting2 = frame.asset("frosting.jpg").center().drag().transform({
+      showStretch: true
+    });
     var sweetFrostingLeft = frame.asset("sweetFrostingLeft.png").center().mov(-200).drag().transform({
       showStretch: true
     })
 
     var sweetFrostingRight = frame.asset("sweetFrostingRight.png").center().mov(200).drag().transform({
       showStretch: true
-    })
+    })*/
 
     var button = new Button(200,60,"Make Mask");
     button.center();
     button.on("click", function(){
-      crustLeft.cache();
-      crust1.filters = [new createjs.AlphaMaskFilter(crustLeft.cacheCanvas)];
-      crust1.updateCache()
+      //crust2.cache();
+      crust2.effect(new AlphaEffect(crustLeft));
       crustLeft.alp(0)
 
-      sweetFrostingLeft.cache()
-      frosting1.filters = [new createjs.AlphaMaskFilter(sweetFrostingLeft.cacheCanvas)];
-      frosting1.updateCache()
-      sweetFrostingLeft.alp(0)
-
-      crustRight.cache()
-      crust2.filters = [new createjs.AlphaMaskFilter(crustRight.cacheCanvas)];
-      crust2.updateCache()
+      //crust1.cache();
+      crust1.effect(new AlphaEffect(crustRight));
       crustRight.alp(0)
 
-      sweetFrostingRight.cache()
-      frosting2.filters = [new createjs.AlphaMaskFilter(sweetFrostingRight.cacheCanvas)];
-      frosting2.updateCache()
-      sweetFrostingRight.alp(0)
+      /*frosting1.effect(new AlphaEffect(sweetFrostingLeft));
+      sweetFrostingLeft.alp(0)
+
+      frosting2.effect(new AlphaEffect(sweetFrostingRight));
+      sweetFrostingRight.alp(0)*/
     });
 
     stage.update(); // this is needed to show any changes
